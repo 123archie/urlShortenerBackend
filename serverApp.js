@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
-import assert from "assert";
 dotenv.config();
 let app=express();
 let filename=fileURLToPath(import.meta.url);
