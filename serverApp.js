@@ -31,7 +31,7 @@ app.get("/submit", async (req, resp)=>{
             
             fs.writeFile("./data.json", JSON.stringify(jsondata), (err)=>{
                 if(err){
-                    resp.status(500).send("Website down!");
+                    
                 }else{
 
                 }
