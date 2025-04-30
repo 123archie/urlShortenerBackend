@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
-import data from "./data.json" assert { type: "json" };
 import assert from "assert";
 dotenv.config();
 let app=express();
@@ -17,16 +16,36 @@ export let PORT=process.env.PORT || 5000;
 app.get("/submit", async (req, resp)=>{
     pathFile=`http://localhost:${PORT}//${shortName}`;
     resp.send(pathFile);
-    data.originalLink=originalLink;
-    data.shortName=shortName;
-    data.shortenedLink=pathFile;
-    fs.writeFile("./data.json", JSON.stringify(data), (err)=>{
+    let data={
+        "originalLink":originalLink,
+        "shortName":shortName,
+        "shortenedLink":pathFile
+    }
+    fs.readFile("./data.json", "utf-8", (err, jsonData)=>{
         if(err){
-
-        }else{
+            console.log("Error reading file!");
+            return ;
+        }try {
+            let jsondata=JSON.parse(jsonData);
+            jsondata.push(data);
+            console.log(jsondata);
             
+            fs.writeFile("./data.json", JSON.stringify(jsondata), (err)=>{
+                if(err){
+                    resp.status(500).send("Website down!");
+                }else{
+
+                }
+            })
+            }
+            
+        catch (error) {
+            console.log("Invalid JSON data");
         }
-    })  
+        
+    })
+
+    
 })  
     
  app.get("//:shortName", (req, resp)=>{
